@@ -58,8 +58,16 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="Procedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Nodes.sql" />
+    <Build Include="Procedures\sp_AddNode.sql" />
+    <Build Include="Procedures\sp_UpdateNode.sql" />
+    <Build Include="Procedures\sp_GetNodeByIdWithChild.sql" />
+    <Build Include="Procedures\sp_GetNodeById.sql" />
+    <Build Include="Procedures\sp_GetNodesList.sql" />
+    <Build Include="Procedures\sp_GetAllNodesList.sql" />
+    <Build Include="Procedures\sp_DeleteNode.sql" />
   </ItemGroup>
 </Project>
