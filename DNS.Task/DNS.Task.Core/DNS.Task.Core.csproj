@@ -47,6 +47,7 @@
     <Compile Include="Store\AdoStoreBase.cs" />
     <Compile Include="Store\AdoUnitOfWork.cs" />
     <Compile Include="Store\ICrudStore.cs" />
+    <Compile Include="Store\IEntityCreator.cs" />
     <Compile Include="Store\IUnitOfWork.cs" />
     <Compile Include="Store\StoredProcedureNodesStore.cs" />
   </ItemGroup>

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using DNS.Task.Core.Models;
 
 namespace DNS.Task.Core.Store
@@ -6,19 +8,19 @@ namespace DNS.Task.Core.Store
 	public interface ICrudStore<TEntity, TKey>
 		where TEntity:IIdentityObject<TKey>
 	{
-		TKey Add(TEntity entity);
+		Task<TKey> AddAsync(TEntity entity, CancellationToken cancellationToken);
 
-		bool Update(TEntity entity);
+		Task<bool> UpdateAsync(TEntity entity, CancellationToken cancellationToken);
 
-		TEntity Get(TKey key);
+		Task<TEntity> GetAsync(TKey key, CancellationToken cancellationToken);
 
-		TEntity Get<TFilter>(TFilter filter)
+		Task<TEntity> GetAsync<TFilter>(TFilter filter, CancellationToken cancellationToken)
 			where TFilter : class;
 
-		IEnumerable<TEntity> GetList();
+		Task<IEnumerable<TEntity>> GetList(CancellationToken cancellationToken);
 
-		IEnumerable<TEntity> GetList<TFilter>(TFilter filter);
+		Task<IEnumerable<TEntity>> GetList<TFilter>(TFilter filter, CancellationToken cancellationToken);
 
-		bool ForceDelete(TKey key);
+		Task<bool> ForceDelete(TKey key, CancellationToken cancellationToken);
 	}
 }

@@ -11,7 +11,7 @@ namespace DNS.Task.Core.Models
 	    }
 1
 
-		public int ParentId { get; set; }
+		public int? ParentId { get; set; }
 
 	    public string Title { get; set; }
 
