@@ -48,6 +48,7 @@
     <Compile Include="Store\AdoUnitOfWork.cs" />
     <Compile Include="Store\ICrudStore.cs" />
     <Compile Include="Store\IUnitOfWork.cs" />
+    <Compile Include="Store\StoredProcedureNodesStore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
