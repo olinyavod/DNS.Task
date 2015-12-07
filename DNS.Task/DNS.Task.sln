@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DNS.Task.Database", "DNS.Task.Database\DNS.Task.Database.sqlproj", "{1BF22CAD-0FD7-4690-A3F3-DD9AADA38CA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DNS.Task.Core", "DNS.Task.Core\DNS.Task.Core.csproj", "{EA7959D3-5B33-4CC4-9D4D-CEA4C662680B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1BF22CAD-0FD7-4690-A3F3-DD9AADA38CA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BF22CAD-0FD7-4690-A3F3-DD9AADA38CA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BF22CAD-0FD7-4690-A3F3-DD9AADA38CA6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1BF22CAD-0FD7-4690-A3F3-DD9AADA38CA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BF22CAD-0FD7-4690-A3F3-DD9AADA38CA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BF22CAD-0FD7-4690-A3F3-DD9AADA38CA6}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{EA7959D3-5B33-4CC4-9D4D-CEA4C662680B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA7959D3-5B33-4CC4-9D4D-CEA4C662680B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA7959D3-5B33-4CC4-9D4D-CEA4C662680B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA7959D3-5B33-4CC4-9D4D-CEA4C662680B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
