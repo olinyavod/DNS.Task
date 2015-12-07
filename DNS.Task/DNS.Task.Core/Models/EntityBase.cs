@@ -1,11 +1,8 @@
-using System;
-
 namespace DNS.Task.Core.Models
 {
-	public class EntityBase : IIdentityObject<Guid>
+	public class EntityBase : IIdentityObject<int>
 	{
-		public Guid Id { get; set; }
+		public int Id { get; set; }
 
-		public bool IsDeleted { get; set; }
 	}
 }
