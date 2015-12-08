@@ -59,6 +59,7 @@
     <Folder Include="Properties" />
     <Folder Include="Tables" />
     <Folder Include="Procedures" />
+    <Folder Include="Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Nodes.sql" />

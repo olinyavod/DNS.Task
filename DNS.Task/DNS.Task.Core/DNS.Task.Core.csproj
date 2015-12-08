@@ -46,9 +46,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Store\AdoStoreBase.cs" />
     <Compile Include="Store\AdoUnitOfWork.cs" />
+    <Compile Include="Store\EntityCreatorBase.cs" />
     <Compile Include="Store\ICrudStore.cs" />
     <Compile Include="Store\IEntityCreator.cs" />
     <Compile Include="Store\IUnitOfWork.cs" />
+    <Compile Include="Store\NodeCreator.cs" />
     <Compile Include="Store\StoredProcedureNodesStore.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
