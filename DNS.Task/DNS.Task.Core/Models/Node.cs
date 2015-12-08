@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DNS.Task.Core.Models
 {
@@ -12,6 +13,7 @@ namespace DNS.Task.Core.Models
 
 		public int? ParentId { get; set; }
 
+		[Required, StringLength(50)]
 	    public string Title { get; set; }
 
 	    public NodeType NodeType { get; set; }
