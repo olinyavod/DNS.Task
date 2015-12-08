@@ -47,11 +47,14 @@
     <Compile Include="Store\AdoStoreBase.cs" />
     <Compile Include="Store\AdoUnitOfWork.cs" />
     <Compile Include="Store\EntityCreatorBase.cs" />
+    <Compile Include="Store\GetNodeByIdRequest.cs" />
+    <Compile Include="Store\GetNodesRequest.cs" />
     <Compile Include="Store\ICrudStore.cs" />
     <Compile Include="Store\IEntityCreator.cs" />
     <Compile Include="Store\IUnitOfWork.cs" />
     <Compile Include="Store\NodeCreator.cs" />
     <Compile Include="Store\StoredProcedureNodesStore.cs" />
+    <Compile Include="Store\StoredProcedureStoreBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

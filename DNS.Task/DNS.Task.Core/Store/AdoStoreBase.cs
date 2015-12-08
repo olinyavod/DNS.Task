@@ -2,7 +2,7 @@
 
 namespace DNS.Task.Core.Store
 {
-	public class AdoStoreBase
+	public abstract class AdoStoreBase
 	{
 		private readonly AdoUnitOfWork _unit;
 

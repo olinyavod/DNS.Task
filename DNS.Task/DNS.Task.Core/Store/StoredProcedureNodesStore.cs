@@ -1,16 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DNS.Task.Core.Models;
 
 namespace DNS.Task.Core.Store
 {
-	public class StoredProcedureNodesStore: AdoStoreBase, ICrudStore<Node, int>
+	public class StoredProcedureNodesStore: StoredProcedureStoreBase, ICrudStore<Node, int>
 	{
-		public StoredProcedureNodesStore(AdoUnitOfWork unit) : base(unit)
+		private readonly NodeCreator _creator;
+
+		public StoredProcedureNodesStore(NodeCreator creator, AdoUnitOfWork unit) 
+			: base(unit)
 		{
+			_creator = creator;
+			RegisterFilter<GetNodeByIdRequest, Task<Node>>(GetAsync);
+			RegisterFilter<GetNodesRequest, Task<IEnumerable<Node>>>(GetListAsync);
+		}
+
+		private async Task<IEnumerable<Node>> GetListAsync(GetNodesRequest request)
+		{
+			using (var reader = await CreateStoreCommand("[dbo].[sp_GetNodesList]",
+				new SqlParameter("@ParentId", request.ParentId))
+				.ExecuteReaderAsync()
+				.ConfigureAwait(true))
+			{
+				return _creator.CreateFullTree(reader);
+			}
+		}
+
+		private async Task<Node> GetAsync(GetNodeByIdRequest request)
+		{
+			using (var reader = await CreateStoreCommand(request.LoadChildren ? "[dbo].[sp_GetNodeByIdWithChilds]" : "[dbo].[sp_GetNodeById]",
+				new SqlParameter("@Id", request.Id))
+				.ExecuteReaderAsync()
+				.ConfigureAwait(true))
+			{
+				if (request.LoadChildren)
+					return _creator.CreateFullTree(reader).FirstOrDefault();
+				return reader.Read() ? _creator.Create(reader) : null;
+			}
 		}
 
 		public async Task<int> AddAsync(Node entity, CancellationToken cancellationToken)
@@ -18,7 +48,9 @@ namespace DNS.Task.Core.Store
 			using (var reader = await CreateStoreCommand("[dbo].[sp_AddNode]",
 				new SqlParameter("@ParentId", entity.ParentId),
 				new SqlParameter("@Title", entity.Title),
-				new SqlParameter("@NodeType", (int)entity.NodeType)).ExecuteReaderAsync(cancellationToken))
+				new SqlParameter("@NodeType", (int)entity.NodeType))
+				.ExecuteReaderAsync(cancellationToken)
+				.ConfigureAwait(true))
 			{
 				return reader.Read() ? reader.GetInt32(0) : -1;
 			}
@@ -30,33 +62,41 @@ namespace DNS.Task.Core.Store
 				new SqlParameter("@id", entity.Id),
 				new SqlParameter("@ParentId", entity.ParentId),
 				new SqlParameter("@Title", entity.Title),
-				new SqlParameter("@NodeType", (int) entity.NodeType)).ExecuteNonQueryAsync(cancellationToken);
+				new SqlParameter("@NodeType", (int) entity.NodeType))
+				.ExecuteNonQueryAsync(cancellationToken)
+				.ConfigureAwait(true);
 			return result > 0;
 		}
 
-		public Task<Node> GetAsync(int key, CancellationToken cancellationToken)
+		public async Task<Node> GetAsync(int key, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			return await Execute<GetNodeByIdRequest, Task<Node>>(new GetNodeByIdRequest(key));
 		}
 
-		public Task<Node> GetAsync<TFilter>(TFilter filter, CancellationToken cancellationToken) where TFilter : class
+		public async Task<Node> GetAsync<TFilter>(TFilter filter, CancellationToken cancellationToken) where TFilter : class
 		{
-			throw new NotImplementedException();
+			return await Execute<TFilter, Task<Node>>(filter);
 		}
 
-		public Task<IEnumerable<Node>> GetList(CancellationToken cancellationToken)
+		public async Task<IEnumerable<Node>> GetList(CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			using (var reader = await CreateStoreCommand("[dbo].[sp_GetAllNodesList]")
+				.ExecuteReaderAsync(cancellationToken)
+				.ConfigureAwait(true))
+				return _creator.CreateFullTree(reader);
 		}
 
-		public Task<IEnumerable<Node>> GetList<TFilter>(TFilter filter, CancellationToken cancellationToken)
+		public async Task<IEnumerable<Node>> GetList<TFilter>(TFilter filter, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			return await Execute<TFilter, Task<IEnumerable<Node>>>(filter);
 		}
 
-		public Task<bool> ForceDelete(int key, CancellationToken cancellationToken)
+		public async Task<bool> ForceDelete(int key, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			var result = await CreateStoreCommand("[dbo].[sp_DeleteNode]", new SqlParameter("@Id", key))
+				.ExecuteNonQueryAsync(cancellationToken)
+				.ConfigureAwait(true);
+			return result > 0;
 		}
 	}
 }
