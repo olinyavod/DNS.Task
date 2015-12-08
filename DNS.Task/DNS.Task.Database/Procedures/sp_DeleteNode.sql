@@ -7,8 +7,7 @@ AS
 		WHERE Id = @Id
 		UNION ALL 
 		SELECT Child.Id, Child.ParentId, Child.Title, Child.NodeType FROM NodeCTE Parent
-		INNER JOIN [dbo].Nodes Child ON Parent.Id = Child.ParentId
-		ORDER BY Child.NodeType, Child.Title		
+		INNER JOIN [dbo].Nodes Child ON Parent.Id = Child.ParentId		
 	)
 	
 	DELETE FROM [dbo].Nodes

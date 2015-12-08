@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
@@ -7,7 +8,7 @@ using DNS.Task.Core.Models;
 
 namespace DNS.Task.Core.Store
 {
-	public class StoredProcedureNodesStore: StoredProcedureStoreBase, ICrudStore<Node, int>
+	public class StoredProcedureNodesStore: StoredProcedureStoreBase, ICrudStore<Node>
 	{
 		private readonly NodeCreator _creator;
 
@@ -45,6 +46,7 @@ namespace DNS.Task.Core.Store
 
 		public async Task<int> AddAsync(Node entity, CancellationToken cancellationToken)
 		{
+			if (entity == null) throw new ArgumentNullException("entity");
 			using (var reader = await CreateStoreCommand("[dbo].[sp_AddNode]",
 				new SqlParameter("@ParentId", entity.ParentId),
 				new SqlParameter("@Title", entity.Title),

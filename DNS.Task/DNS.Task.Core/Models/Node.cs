@@ -9,7 +9,6 @@ namespace DNS.Task.Core.Models
 	    {
 		    Children = new List<Node>();
 	    }
-1
 
 		public int? ParentId { get; set; }
 

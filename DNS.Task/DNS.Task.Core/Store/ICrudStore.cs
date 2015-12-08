@@ -23,4 +23,10 @@ namespace DNS.Task.Core.Store
 
 		Task<bool> ForceDelete(TKey key, CancellationToken cancellationToken);
 	}
+
+	public interface ICrudStore<TEntity> : ICrudStore<TEntity, int> 
+		where TEntity : IIdentityObject<int>
+	{
+		
+	}
 }

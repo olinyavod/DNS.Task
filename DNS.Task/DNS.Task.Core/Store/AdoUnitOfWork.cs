@@ -11,6 +11,7 @@ namespace DNS.Task.Core.Store
 		public AdoUnitOfWork(string connectionString)
 		{
 			_connection = new SqlConnection(connectionString);
+			_connection.Open();
 			_transaction = _connection.BeginTransaction(IsolationLevel.ReadCommitted);
 		}
 
@@ -28,16 +29,20 @@ namespace DNS.Task.Core.Store
 		{
 			if (disposing)
 			{
-				_transaction.Commit();
+				if (!_cancelled)
+					_transaction.Commit();
 				_transaction.Dispose();
 				_connection.Close();
 				_connection.Dispose();
 			}
 		}
 
+		private bool _cancelled;
+
 		public void Rollback()
 		{
 			_transaction.Rollback();
+			_cancelled = true;
 		}
 
 		public SqlCommand CreateSqlCommand(string sql, params SqlParameter[] parameters)
