@@ -1,11 +1,16 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Autofac;
 using DNS.Task.Core.Models;
 using DNS.Task.Core.Store;
 
-namespace DNS.Task.Core.Tests
+namespace DNS.Task.Web
 {
-	class AdoModule:Module
+	class AdoModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -25,7 +30,6 @@ namespace DNS.Task.Core.Tests
 			builder.RegisterType<StoredProcedureNodesStore>()
 				.As<ICrudStore<Node>>()
 				.InstancePerLifetimeScope();
-
 		}
 	}
 }
