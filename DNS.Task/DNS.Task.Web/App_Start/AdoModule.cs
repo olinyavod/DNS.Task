@@ -20,7 +20,6 @@ namespace DNS.Task.Web
 				.InstancePerLifetimeScope()
 				.OnRelease(unit =>
 				{
-					unit.Rollback();
 					unit.Dispose();
 				});
 

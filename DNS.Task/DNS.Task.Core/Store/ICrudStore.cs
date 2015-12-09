@@ -17,11 +17,11 @@ namespace DNS.Task.Core.Store
 		Task<TEntity> GetAsync<TFilter>(TFilter filter, CancellationToken cancellationToken)
 			where TFilter : class;
 
-		Task<IEnumerable<TEntity>> GetList(CancellationToken cancellationToken);
+		Task<IEnumerable<TEntity>> GetListAsync(CancellationToken cancellationToken);
 
-		Task<IEnumerable<TEntity>> GetList<TFilter>(TFilter filter, CancellationToken cancellationToken);
+		Task<IEnumerable<TEntity>> GetListAsync<TFilter>(TFilter filter, CancellationToken cancellationToken);
 
-		Task<bool> ForceDelete(TKey key, CancellationToken cancellationToken);
+		Task<bool> ForceDeleteAsync(TKey key, CancellationToken cancellationToken);
 	}
 
 	public interface ICrudStore<TEntity> : ICrudStore<TEntity, int> 

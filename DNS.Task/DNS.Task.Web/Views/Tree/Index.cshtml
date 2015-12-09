@@ -1,0 +1,66 @@
+﻿<html>
+<head>
+    <title>Tree View – приложение ASP.NET</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr", "~/bundles/jquery", "~/Scripts/jstree.js")
+    <style type="text/css">
+        #nodes {
+            width: 200px;
+            height: 400px;
+            overflow: auto;
+        }
+        li {
+            list-style-type: none;
+        }
+
+        ul {
+            margin-left: 0;
+            padding-left: 0;
+        }
+    </style>
+    <link href="~/Scripts/themes/default/style.min.css" rel="stylesheet" />
+    
+
+    <script type="text/javascript">
+       
+        $(document).ready(function() { $('#nodes').jstree({
+            'plugins': ["types"],
+            'core': {
+                "animation": true,
+                "check_callback": true,
+                'data': {
+                    'url': '@Url.Action("GetList")',
+                    'data': function (node){return node.Id}
+                }
+                    
+            },
+            "types": {
+                "file": {
+                    "icon": "~/Content/file.png",
+                    "valid_children": [""]
+                },
+                "folder": {
+                    "icon": "~/Content/folder.png",
+                    "valid_children": ["file", "folder"]
+
+                },
+                "save": {
+                    "icon": "~/Content/throbber.gif",
+
+                }
+            }
+        }); });
+    </script>
+</head>
+<body>
+    <h2>Tree View</h2>
+    <div id="nodes"></div>
+
+</body>
+</html>
+
+
+
+
+
+

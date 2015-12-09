@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 
 namespace DNS.Task.Core.Store
 {
@@ -10,7 +11,7 @@ namespace DNS.Task.Core.Store
 		{
 			try
 			{
-				return ((TValue) reader[String.Join(".", name)]);
+				return ((TValue) reader[string.Join(".", name.Where(i => !string.IsNullOrWhiteSpace(i)))]);
 			}
 			catch (Exception)
 			{

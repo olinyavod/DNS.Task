@@ -80,7 +80,7 @@ namespace DNS.Task.Core.Store
 			return await Execute<TFilter, Task<Node>>(filter);
 		}
 
-		public async Task<IEnumerable<Node>> GetList(CancellationToken cancellationToken)
+		public async Task<IEnumerable<Node>> GetListAsync(CancellationToken cancellationToken)
 		{
 			using (var reader = await CreateStoreCommand("[dbo].[sp_GetAllNodesList]")
 				.ExecuteReaderAsync(cancellationToken)
@@ -88,12 +88,12 @@ namespace DNS.Task.Core.Store
 				return _creator.CreateFullTree(reader);
 		}
 
-		public async Task<IEnumerable<Node>> GetList<TFilter>(TFilter filter, CancellationToken cancellationToken)
+		public async Task<IEnumerable<Node>> GetListAsync<TFilter>(TFilter filter, CancellationToken cancellationToken)
 		{
 			return await Execute<TFilter, Task<IEnumerable<Node>>>(filter);
 		}
 
-		public async Task<bool> ForceDelete(int key, CancellationToken cancellationToken)
+		public async Task<bool> ForceDeleteAsync(int key, CancellationToken cancellationToken)
 		{
 			var result = await CreateStoreCommand("[dbo].[sp_DeleteNode]", new SqlParameter("@Id", key))
 				.ExecuteNonQueryAsync(cancellationToken)
