@@ -18,6 +18,7 @@ namespace DNS.Task.Core.Store
 				Title = GetValue(reader, String.Empty, prefix, "Title")
 			};
 		}
+		
 
 		public IEnumerable<Node> CreateFullTree(IDataReader reader, string prefix = null)
 		{

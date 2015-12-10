@@ -54,7 +54,8 @@ namespace DNS.Task.Web.Controllers
 	        if (ModelState.IsValid)
 	        {
 		        node.Id = id;
-		        await Store.UpdateAsync(node, CancellationToken.None);
+		        await Store.UpdateAsync(node, CancellationToken.None)
+					.ConfigureAwait(true);
 		        return Json(new {success = true, result = node}, JsonRequestBehavior.AllowGet);
 	        }
 	        return Json(new

@@ -27,7 +27,12 @@ namespace DNS.Task.Core.Store
 				.ExecuteReaderAsync()
 				.ConfigureAwait(true))
 			{
-				return _creator.CreateFullTree(reader);
+				var result = new List<Node>();
+				while (reader.Read())
+				{
+					result.Add(_creator.Create(reader));
+				}
+				return result;
 			}
 		}
 
@@ -60,7 +65,7 @@ namespace DNS.Task.Core.Store
 
 		public async Task<bool> UpdateAsync(Node entity, CancellationToken cancellationToken)
 		{
-			var result = await CreateStoreCommand("[dbo].[sp_AddNode]",
+			var result = await CreateStoreCommand("[dbo].[sp_UpdateNode]",
 				new SqlParameter("@id", entity.Id),
 				new SqlParameter("@ParentId", entity.ParentId),
 				new SqlParameter("@Title", entity.Title),

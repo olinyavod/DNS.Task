@@ -1,8 +1,9 @@
-﻿<head>
+﻿<html>
+<head>
     <title>Tree View – приложение ASP.NET</title>
     @Styles.Render("~/Content/css", "~/Scripts/plugins/dynatree/skin-vista/ui.dynatree.css")
     @Scripts.Render("~/bundles/modernizr", "~/bundles/jquery", "~/Scripts/plugins/dynatree/jquery.dynatree.js")
-    <style type="text/css">
+   <style type="text/css">
         #nodes {
             width: 50%;
             height: 100%;
@@ -11,7 +12,7 @@
         }
     </style>
     <script type="text/javascript">
-
+        
         function editNode(node) {
             var prevTitle = node.data.title, tree = node.tree;
             // Disable dynatree mouse- and key handling
@@ -37,17 +38,18 @@
                     // Accept new value, when user leaves <input>
                     var title = $("input#editNode").val();
                     node.nodeWait = true;
-                    node.data.data.title = title;
+                    var data = node.data.data;
+                    data.Title = title;
                     $.ajax({
                         url: '@Url.Action("Edit", "Tree")',
-                        data: node.data.data,
+                        data: data,
                         type: 'post',
                         cache: false,
                         success: function(result) {
-                            node.setTitle(result.result.title);
+                            node.setTitle(result.result.Title);
                             node.nodeWait = false;
                         }
-                });
+                    });
                     
                     // Re-enable mouse and keyboard handlling
                     tree.$widget.bind();
@@ -88,12 +90,55 @@
                         url: '@Url.Action("GetList", "Tree")?parentId=' + node.data.key,
                         // We don't want the next line in production code:
                         debugLazyDelay: 750
-                    })}})});
+                    })},
+                dnd: {
+                    onDragStart: function (node) {
+                        /** This function MUST be defined to enable dragging for the tree.
+                         *  Return false to cancel dragging of node.
+                         */
+                        return true;
+                    },
+                    autoExpandMS: 1000,
+                    preventVoidMoves: true,
+                    onDragEnter: function (node, sourceNode) {
+                        return true;
+                    },
+                    onDragOver: function (node, sourceNode, hitMode) {
+                        if (node.isDescendantOf(sourceNode)) {
+                            return false;
+                        }
+                        // Prohibit creating childs in non-folders (only sorting allowed)
+                        if (!node.data.isFolder && hitMode === "over") {
+                            return "after";
+                        }
+                    },
+                    onDrop: function (node, sourceNode, hitMode, ui, draggable) {
+                        var data = sourceNode.data.data;
+                        if (!!node || hitMode !== 'after' || hitMode !== 'before')
+                            data.ParentId = node.data.data.Id;
+                        else
+                            data.ParentId = null;
+                        $.ajax({
+                            url: '@Url.Action("Edit", "Tree")',
+                            data: data,
+                            type: 'post',
+                            cache: false,
+                            success: function (result) {
+                                sourceNode.move(node, hitMode);
+                                node.nodeWait = false;
+                            }
+                        });
+                        
+                        // expand the drop target
+                        //        sourceNode.expand(true);
+                    }
+                }
+            })});
     </script>
 </head>
 <body> 
     <h2>Tree View</h2>
-    <ul id="nodes"></ul>
+    <div id="nodes"></div>
 
 </body>
 </html>
