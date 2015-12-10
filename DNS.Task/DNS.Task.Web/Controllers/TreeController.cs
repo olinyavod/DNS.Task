@@ -74,7 +74,7 @@ namespace DNS.Task.Web.Controllers
 	    public async Task<JsonResult> GetList(int? parenId)
 	    {
 		    var result = await Store.GetListAsync(new GetNodesRequest(), CancellationToken.None);
-		    return Json(result.Select(i => new { id = i.Id, text = i.Title, type = i.NodeType.ToString().ToLower(), children = i.NodeType == NodeType.Folder }), JsonRequestBehavior.AllowGet);
+			return Json(result.Select(i => new { id = i.Id, title = i.Title, isFolder = i.NodeType == NodeType.Folder, hasChildren = i.NodeType == NodeType.Folder }), JsonRequestBehavior.AllowGet);
 	    }
     }
 }
