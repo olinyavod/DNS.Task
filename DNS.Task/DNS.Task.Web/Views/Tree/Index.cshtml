@@ -1,6 +1,4 @@
-﻿@using System.Web.UI.WebControls
-<html>
-<head>
+﻿<head>
     <title>Tree View – приложение ASP.NET</title>
     @Styles.Render("~/Content/css", "~/Scripts/plugins/dynatree/skin-vista/ui.dynatree.css")
     @Scripts.Render("~/bundles/modernizr", "~/bundles/jquery", "~/Scripts/plugins/dynatree/jquery.dynatree.js")
@@ -13,30 +11,84 @@
         }
     </style>
     <script type="text/javascript">
+
+        function editNode(node) {
+            var prevTitle = node.data.title, tree = node.tree;
+            // Disable dynatree mouse- and key handling
+            tree.$widget.unbind();
+            // Replace node with <input>
+            $(".dynatree-title", node.span).html("<input id='editNode' value='" + prevTitle + "'>");
+            // Focus <input> and bind keyboard handler
+            $("input#editNode")
+                .focus()
+                .keydown(function(event) {
+                    switch (event.which) {
+                    case 27: // [esc]
+                        // discard changes on [esc]
+                        $("input#editNode").val(prevTitle);
+                        $(this).blur();
+                        break;
+                    case 13: // [enter]
+                        // simulate blur to accept new value
+                        $(this).blur();
+                        break;
+                    }
+                }).blur(function(event) {
+                    // Accept new value, when user leaves <input>
+                    var title = $("input#editNode").val();
+                    node.nodeWait = true;
+                    node.data.data.title = title;
+                    $.ajax({
+                        url: '@Url.Action("Edit", "Tree")',
+                        data: node.data.data,
+                        type: 'post',
+                        cache: false,
+                        success: function(result) {
+                            node.setTitle(result.result.title);
+                            node.nodeWait = false;
+                        }
+                });
+                    
+                    // Re-enable mouse and keyboard handlling
+                    tree.$widget.bind();
+                    node.focus();
+                });
+        }
+
         $(document).ready(function() {
             $('#nodes').dynatree({
                 title: "Tree view demo",
                 fx: { height: "toggle", duration: 200 },
                 autoFocus: true,
                 minExpandLevel: 1,
+                onClick: function(node, event) {
+                    if (event.shiftKey) {
+                        editNode(node);
+                        return false;
+                    }
+                    return true;
+                },
+                onDblClick: function(node, event) {
+                    editNode(node);
+                    return false;
+                },
+                onKeydown: function(node, event) {
+                    switch (event.which) {
+                    case 113: // [F2]
+                        editNode(node);
+                        return false;
+                    }
+                    return true;
+                },
                 initAjax: {
-                    url: "/Tree/GetList"
+                    url: '@Url.Action("GetList", "Tree")'
                 },
                 onLazyRead: function(node) {
-                    // In real life we would call something like this:
-                    //              node.appendAjax({
-                    //                  url: "/getChildrenAsJson",
-                    //                data: {key: node.data.key,
-                    //                       mode: "funnyMode"
-                    //                         }
-                    //              });
-                    // .. but here we use a local file instead:
                     node.appendAjax({
-                        url: "/Tree/GetList",
-                        data: {parentId: node.id},
+                        url: '@Url.Action("GetList", "Tree")?parentId=' + node.data.key,
                         // We don't want the next line in production code:
                         debugLazyDelay: 750
-            })}})});
+                    })}})});
     </script>
 </head>
 <body> 

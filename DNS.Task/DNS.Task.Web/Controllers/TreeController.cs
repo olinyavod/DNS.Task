@@ -71,10 +71,18 @@ namespace DNS.Task.Web.Controllers
         }
 
 
-	    public async Task<JsonResult> GetList(int? parenId)
+	    public async Task<JsonResult> GetList(int? parentId)
 	    {
-		    var result = await Store.GetListAsync(new GetNodesRequest(), CancellationToken.None);
-			return Json(result.Select(i => new { id = i.Id, title = i.Title, isFolder = i.NodeType == NodeType.Folder, hasChildren = i.NodeType == NodeType.Folder }), JsonRequestBehavior.AllowGet);
+		    var result = await Store.GetListAsync(new GetNodesRequest(parentId), CancellationToken.None);
+			return Json(result.Select(i => new
+			{ 
+				key = i.Id,
+				title = i.Title, 
+				isFolder = i.NodeType == NodeType.Folder, 
+				hasChildren = i.NodeType == NodeType.Folder,
+				isLazy = i.NodeType == NodeType.Folder,
+				data = i
+			}), JsonRequestBehavior.AllowGet);
 	    }
     }
 }

@@ -9,5 +9,6 @@ AS
 		SELECT Child.Id, Child.ParentId, Child.Title, Child.NodeType FROM NodeCTE Parent
 		INNER JOIN [dbo].Nodes Child ON Parent.Id = Child.ParentId		
 	)
-	SELECT * FROM NodeCTE
+	SELECT * FROM NodeCTE v
+	ORDER BY v.ParentId, v.NodeType, v.Title
 RETURN 0
