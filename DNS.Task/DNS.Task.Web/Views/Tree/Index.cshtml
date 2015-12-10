@@ -114,7 +114,7 @@
                     },
                     onDrop: function (node, sourceNode, hitMode, ui, draggable) {
                         var data = sourceNode.data.data;
-                        if (!!node || hitMode !== 'after' || hitMode !== 'before')
+                        if (!!node && hitMode !== 'after' && hitMode !== 'before')
                             data.ParentId = node.data.data.Id;
                         else
                             data.ParentId = null;
