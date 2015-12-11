@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -9,8 +8,6 @@ using Autofac;
 using Autofac.Integration.Owin;
 using DNS.Task.Core.Models;
 using DNS.Task.Core.Store;
-using FormCollection = System.Web.Mvc.FormCollection;
-using Microsoft.Owin.Extensions;
 
 namespace DNS.Task.Web.Controllers
 {
@@ -37,12 +34,20 @@ namespace DNS.Task.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> Create(Node node)
         {
-	        if (ModelState.IsValid)
+	        try
 	        {
-		        node.Id = await Store.AddAsync(node, CancellationToken.None);
-		        return Json(new {success = true, result = node});
+		        if (ModelState.IsValid)
+		        {
+			        node.Id = await Store.AddAsync(node, CancellationToken.None);
+			        return Json(new {success = true, result = node});
+		        }
+		        return Json(new {success = false, reslt = "Invalid object!"}, JsonRequestBehavior.AllowGet);
 	        }
-	        return Json(new {success = false, reslt = "Invalid object!"}, JsonRequestBehavior.AllowGet);
+	        catch (Exception)
+	        {
+				Request.GetOwinContext().GetAutofacLifetimeScope().Resolve<IUnitOfWork>().Rollback();
+		        return Json(new {success = false});
+	        }
         }
 
        
@@ -51,18 +56,26 @@ namespace DNS.Task.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> Edit(int id, Node node)
         {
-	        if (ModelState.IsValid)
+	        try
 	        {
-		        node.Id = id;
-		        await Store.UpdateAsync(node, CancellationToken.None)
-					.ConfigureAwait(true);
-		        return Json(new {success = true, result = node}, JsonRequestBehavior.AllowGet);
+		        if (ModelState.IsValid)
+		        {
+			        node.Id = id;
+			        await Store.UpdateAsync(node, CancellationToken.None)
+				        .ConfigureAwait(true);
+			        return Json(new {success = true, result = node}, JsonRequestBehavior.AllowGet);
+		        }
+		        return Json(new
+		        {
+			        success = false,
+			        result = "Invalid object!"
+		        }, JsonRequestBehavior.AllowGet);
 	        }
-	        return Json(new
+	        catch (Exception)
 	        {
-		        success = false,
-		        result = "Invalid object!"
-	        }, JsonRequestBehavior.AllowGet);
+				Request.GetOwinContext().GetAutofacLifetimeScope().Resolve<IUnitOfWork>().Rollback();
+		        return Json(new {success = false});
+	        }
         }
 
         // GET: Tree/Delete/5

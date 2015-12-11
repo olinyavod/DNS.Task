@@ -60,6 +60,7 @@
     <Folder Include="Tables" />
     <Folder Include="Procedures" />
     <Folder Include="Views" />
+    <Folder Include="Custom Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Nodes.sql" />
@@ -70,5 +71,8 @@
     <Build Include="Procedures\sp_GetNodesList.sql" />
     <Build Include="Procedures\sp_GetAllNodesList.sql" />
     <Build Include="Procedures\sp_DeleteNode.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Custom Scripts\CreateNodesTree.sql" />
   </ItemGroup>
 </Project>
